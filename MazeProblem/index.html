@@ -26,7 +26,7 @@
                     prepareHeight: [],
                     prepareWidth: [],
                     setItem: [],
-                    itemLeft: 10,
+                    itemLeft: null,
                     count: 20,
                     timer: null
                 }
@@ -37,7 +37,8 @@
                 this.state.setWidth = prompt("enter height");
                 this.setState({
                     setHeight: this.state.setHeight,
-                    setWidth: this.state.setWidth
+                    setWidth: this.state.setWidth,
+                    itemLeft:this.state.setHeight
                 })
 
                 if (this.state.setHeight && this.state.setWidth !== null) {
