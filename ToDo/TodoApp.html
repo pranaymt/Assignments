@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>ToDo</title>
+    <script>
+        var addCount = 0;
+        function addToDoList(ev) {
+            if (ev.keyCode == 13) {
+                addCount++;
+                var parentElement = document.getElementsByClassName("todoListing")[0];
+                var listStyle = document.createElement("div");
+                listStyle.setAttribute("class", "todolist");
+                listStyle.setAttribute("id", `todolist${addCount}`);
+                var list = document.createElement("h4");
+                list.innerHTML = ev.target.value;
+                list.setAttribute("class", "todoText");
+                var close = document.createElement("i");
+                close.setAttribute("class", "todoListClose fa fa-close");
+                listStyle.appendChild(list);
+                listStyle.appendChild(close);
+                parentElement.appendChild(listStyle);
+            }
+        }
+        window.addEventListener("click", (ev) => {
+            if (ev.target.classList[0] == "todoListClose") {
+                debugger;
+                let id = ev.target.parentNode.id;
+                document.getElementById(`${id}`).remove();
+            }
+            if (ev.target.className == "todolist") {
+                ev.target.style.backgroundColor = "#00d97b"
+
+            }
+
+
+        })
+    </script>
+</head>
+
+<body>
+    <div class="main hw100">
+        <div class="wrapper">
+            <h1 class="todolabel pt25">WORK TO-DOS</h1>
+            <h4 class="enterTextInfoLabel pt25">Enter text into the input field to add items to the list</h4>
+            <h4 class="markCompleteInfoLabel pt25">Click the items to mark it as complete</h4>
+            <h4 class="removeTodoInfoLabel pt25">Click the "X" to remove the items from your list</h4>
+
+            <div class="InputAndEdit">
+                <input class="mtb25" type="text" onkeydown="addToDoList(event)" />
+                <div class="editIconAlign InputAndEdit">
+                    <i class="editIcon fa fa-pencil" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+        <div class="todoListing">
+        </div>
+    </div>
+</body>
+
+</html>

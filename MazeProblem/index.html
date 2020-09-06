@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type='text/babel'>
+
+        class MazeProblem extends React.Component {
+            constructor() {
+                super();
+                this.state = {
+                    setWidth: null,
+                    setHeight: null,
+                    prepareHeight: [],
+                    prepareWidth: [],
+                    setItem: [],
+                    itemLeft: 10,
+                    count: 20,
+                    timer: null
+                }
+            }
+            componentDidMount() {
+
+                this.state.setHeight = prompt("enter height");
+                this.state.setWidth = prompt("enter height");
+                this.setState({
+                    setHeight: this.state.setHeight,
+                    setWidth: this.state.setWidth
+                })
+
+                if (this.state.setHeight && this.state.setWidth !== null) {
+                    this.prepareBoard();
+                }
+
+                window.addEventListener("keydown", (ev) => {
+                    ;
+                    this.movePerson(ev);
+                })
+                this.state.timer = setInterval(() => {
+                    if (this.state.count != 0) {
+                        this.setState({
+                            count: this.state.count - 1
+                        })
+                    }
+                    else {
+                        if (this.state.itemLeft == 0) {
+                            alert("completed");
+                            clearInterval(this.state.timer);
+                        }
+                        else {
+                            alert("lost");
+                            clearInterval(this.state.timer);
+                        }
+                    }
+                }, 1000)
+
+            }
+
+            prepareBoard() {
+                for (let i = 0; i < parseInt(this.state.setHeight); i++) {
+                    this.state.prepareHeight.push(i)
+                }
+                for (let j = 0; j < parseInt(this.state.setWidth); j++) {
+                    this.state.prepareWidth.push(j)
+                }
+                this.setState({
+                    prepareHeight: this.state.prepareHeight,
+                    prepareWidth: this.state.prepareWidth,
+                })
+
+
+            }
+            componentDidUpdate(prevProps, prevState) {
+                if (this.state.prepareHeight && this.state.prepareWidth != null) {
+                    let arr = [];
+                    for (let i = 1; i <= this.state.setHeight; i++) {
+                        for (let j = 0; j <= this.state.setWidth; j++) {
+                            if (j > i) {
+                                arr.push(i);
+                            }
+                        }
+                    }
+                    arr.sort(() => Math.random() - 0.5);
+                    // let arrayNum = Math.floor(Math.random() * 10 * Math.pow(10, this.state.setHeight));
+                    // debugger;
+                    // let setItem = arrayNum.toString().split("");
+                    if (this.state.setItem.length == 0) {
+                        debugger;
+                        this.setState({
+                            setItem: arr
+                        })
+
+                    }
+                    console.log(this.state.setItem);
+                }
+                if (this.state.itemLeft == 0) {
+                    setTimeout(() => {
+                        alert("completed");
+                        clearInterval(this.state.timer);
+                    }, 100)
+
+
+                }
+            }
+            movePerson(ev) {
+                if (ev.keyCode == 37) {
+                    let person = document.getElementById("person");
+
+                    document.getElementById("person").parentElement.previousElementSibling.appendChild(person);
+                    if (document.getElementById("person").previousSibling) {
+
+                        document.getElementById("person").parentElement.removeChild(document.getElementById("person").previousSibling);
+                        this.setState({
+                            itemLeft: this.state.itemLeft - 1
+                        })
+
+                    }
+                }
+                if (ev.keyCode == 38) {
+                    let superParentId = document.getElementById("person").parentElement.parentElement;
+                    let superParentNextSiblingId = superParentId.previousElementSibling;
+                    let ParentId = document.getElementById("person").parentElement.id;
+                    let target = superParentNextSiblingId.children[ParentId];
+                    console.log(target);
+                    let person = document.getElementById("person");
+                    target.appendChild(person);
+                    if (document.getElementById("person").previousSibling) {
+
+                        document.getElementById("person").parentElement.removeChild(document.getElementById("person").previousSibling);
+                        this.setState({
+                            itemLeft: this.state.itemLeft - 1
+                        })
+                    }
+                }
+                if (ev.keyCode == 39) {
+
+                    let person = document.getElementById("person");
+                    console.log(document.getElementById("person").parentElement.nextElementSibling.id);
+                    document.getElementById("person").parentElement.nextElementSibling.appendChild(person);
+                    if (document.getElementById("person").previousSibling) {
+
+                        document.getElementById("person").parentElement.removeChild(document.getElementById("person").previousSibling);
+                        this.setState({
+                            itemLeft: this.state.itemLeft - 1
+                        })
+                    }
+                }
+                if (ev.keyCode == 40) {
+                    let superParentId = document.getElementById("person").parentElement.parentElement;
+                    let superParentNextSiblingId = superParentId.nextElementSibling;
+                    let ParentId = document.getElementById("person").parentElement.id;
+                    let target = superParentNextSiblingId.children[ParentId];
+                    console.log(target);
+                    let person = document.getElementById("person");
+                    target.appendChild(person);
+                    if (document.getElementById("person").previousSibling) {
+
+                        document.getElementById("person").parentElement.removeChild(document.getElementById("person").previousSibling);
+                        this.setState({
+                            itemLeft: this.state.itemLeft - 1
+                        })
+                    }
+
+                }
+            }
+
+            render() {
+                return (
+                    <div style={{ position: "relative" }}>
+                        {this.state.setHeight && this.state.setWidth && this.state.prepareHeight.map((h, i) => {
+                            return <div id={i} style={{ display: "flex" }}>
+                                {this.state.prepareWidth.map((w, j) => {
+                                    return <div id={j} style={{ border: "1px solid red", width: "50px", height: "50px", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "20px", color: "green" }}>{i == 0 && j == 0 ? <i id="person" onKeyDown={(ev) => { (ev.keyCode == 37 || ev.keyCode == 38 || ev.keyCode == 39 || ev.keyCode == 40) && this.movePerson(ev) }} style={{ fontSize: "30px", color: "blue" }} class="fa fa-male" aria-hidden="true"></i> : this.state.setItem[i] == j && <i class="fa fa-apple" aria-hidden="true"></i>}</div>
+                                })}
+                            </div>
+                        })}
+                        <div style={{ padding: "50px 0px 0px 200px" }}><span style={{ color: "blue" }}>Time Left:</span><span style={{ fontWeight: "bold" }}>{"00" + ":" + this.state.count}</span></div>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<MazeProblem />, document.getElementById('root'));
+    </script>
+</body>
+
+</html>
